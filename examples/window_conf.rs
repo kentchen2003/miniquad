@@ -17,7 +17,11 @@ fn main() {
             window_title: "Miniquad".to_string(),
             window_width: 1024,
             window_height: 768,
-            fullscreen: true,
+            fullscreen: false,
+            window_resizable: true,
+            fullsize_content_view: true,
+            titlebar_shown: false,
+            title_shown: false,
             ..Default::default()
         },
         || {

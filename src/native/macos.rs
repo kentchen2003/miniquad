@@ -1049,10 +1049,15 @@ where
 
     initialize_menu_bar(ns_app);
 
-    let window_masks = NSWindowStyleMask::NSTitledWindowMask as u64
+    let mut window_masks = NSWindowStyleMask::NSTitledWindowMask as u64
         | NSWindowStyleMask::NSClosableWindowMask as u64
-        | NSWindowStyleMask::NSMiniaturizableWindowMask as u64
-        | NSWindowStyleMask::NSResizableWindowMask as u64;
+        | NSWindowStyleMask::NSMiniaturizableWindowMask as u64;
+    if conf.window_resizable {
+        window_masks = window_masks | NSWindowStyleMask::NSResizableWindowMask as u64
+    }
+    if conf.fullsize_content_view {
+        window_masks = window_masks | NSWindowStyleMask::NSFullSizeContentViewWindowMask as u64
+    }
 
     let window_frame = NSRect {
         origin: NSPoint { x: 0., y: 0. },
@@ -1083,6 +1088,11 @@ where
     let () = msg_send![window, setTitle: title];
     let () = msg_send![window, center];
     let () = msg_send![window, setAcceptsMouseMovedEvents: YES];
+    let () = msg_send![window, setTitleVisibility: 
+        if conf.title_shown {NSWindowTitleVisibility::NSWindowTitleVisible} 
+        else {NSWindowTitleVisibility::NSWindowTitleHidden}];
+    let () =
+        msg_send![window, setTitlebarAppearsTransparent: if conf.titlebar_shown {NO} else {YES}];
 
     let view = match conf.platform.apple_gfx_api {
         AppleGfxApi::OpenGl => create_opengl_view(&mut display, conf.sample_count, conf.high_dpi),

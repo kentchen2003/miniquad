@@ -181,6 +181,11 @@ pub struct Conf {
     /// Platform specific settings. Hints to OS for context creation, driver-specific
     /// settings etc.
     pub platform: Platform,
+
+    pub transparent: bool,
+    pub titlebar_shown: bool,
+    pub fullsize_content_view: bool,
+    pub title_shown: bool,
 }
 
 /// Icon image in three levels of detail.
@@ -225,6 +230,11 @@ impl Default for Conf {
             window_resizable: true,
             icon: Some(Icon::miniquad_logo()),
             platform: Default::default(),
+
+            transparent: false,
+            titlebar_shown: true,
+            fullsize_content_view: false,
+            title_shown: true,
         }
     }
 }
